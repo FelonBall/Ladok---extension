@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ladok++ – Inställningar</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="header">
+        <h1>Ladok++</h1>
+        <p>Inställningar för level-kurva och visning.</p>
+      </header>
+
+      <section class="card">
+        <h2>Progression</h2>
+
+        <label>
+          <span>Level-exponent (kurva)</span>
+          <input id="levelExponent" type="number" min="1" max="3" step="0.05" />
+        </label>
+
+        <div class="hint" style="margin-top: 12px;">
+          <strong>Tips:</strong> Lägre exponent = snabbare nivåer i början.<br>
+          Högre = jämnare fördelning. Standard: <code>1.85</code>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Visning</h2>
+
+        <label class="check">
+          <input id="hideLabel" type="checkbox" />
+          <span>Göm "Summering resultat:"</span>
+        </label>
+
+        <label class="check">
+          <input id="showXpToNext" type="checkbox" />
+          <span>Visa XP till nästa level</span>
+        </label>
+
+        <label class="check">
+          <input id="epicMode" type="checkbox" />
+          <span>Legendary mode ✨ (guld, glow, shimmer)</span>
+        </label>
+      </section>
+
+      <footer class="footer">
+        <button id="save" class="primary">Spara</button>
+        <button id="reset">Återställ</button>
+        <span id="status" class="status"></span>
+      </footer>
+    </main>
+
+    <script src="options.js"></script>
+  </body>
+</html>
