@@ -16,6 +16,7 @@
         "https://student.ladok.se/student/app/studentwebb/min-utbildning/alla*"
       ],
       "js": ["main_page.js"],
+      "css": ["main.css"],
       "run_at": "document_idle"
     },
     {

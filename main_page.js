@@ -428,119 +428,22 @@
   }
 
   // ---------------- EPIC CSS -----------------
-  function ensureLegendaryStyle(mountId) {
-    const styleId = "studyquest-legendary-style";
-    if (document.getElementById(styleId)) return;
-
-    const style = document.createElement("style");
-    style.id = styleId;
-    style.textContent = `
-      @keyframes sq_glowPulse { 0%,100%{transform:scale(1);opacity:.95} 50%{transform:scale(1.03);opacity:1} }
-      @keyframes sq_emberDrift { 0%{transform:translate3d(-8%,10%,0) scale(1);opacity:0} 12%{opacity:.55} 60%{opacity:.35} 100%{transform:translate3d(8%,-12%,0) scale(1.05);opacity:0} }
-      @keyframes sq_shimmerSweep { 0%{transform:translateX(-140%) skewX(-18deg);opacity:0} 12%{opacity:.7} 60%{opacity:.25} 100%{transform:translateX(140%) skewX(-18deg);opacity:0} }
-      @keyframes sq_runeSpin { 0%{transform:rotate(0deg);opacity:.55} 50%{opacity:.75} 100%{transform:rotate(360deg);opacity:.55} }
-
-      #${mountId}.sq-legendary { position:relative; overflow:hidden; isolation:isolate; transform:translateZ(0); }
-      #${mountId}.sq-legendary::before{
-        content:""; position:absolute; inset:-40%;
-        background:
-          radial-gradient(circle at 20% 20%, rgba(255,236,170,.40), transparent 42%),
-          radial-gradient(circle at 70% 30%, rgba(255,210,120,.32), transparent 45%),
-          radial-gradient(circle at 50% 75%, rgba(255,255,255,.18), transparent 55%),
-          radial-gradient(circle at 30% 80%, rgba(0,0,0,.10), transparent 55%);
-        filter:blur(2px); opacity:.9; animation:sq_glowPulse 2.6s ease-in-out infinite;
-        pointer-events:none; mix-blend-mode:overlay; z-index:0;
-      }
-      #${mountId}.sq-legendary::after{
-        content:""; position:absolute; inset:0;
-        background:
-          radial-gradient(circle, rgba(255,220,120,.70) 1px, transparent 1.4px) 0 0/22px 22px,
-          radial-gradient(circle, rgba(255,245,200,.55) 1px, transparent 1.4px) 10px 14px/28px 28px;
-        opacity:.45; animation:sq_emberDrift 3.4s ease-in-out infinite;
-        pointer-events:none; mix-blend-mode:screen; z-index:0;
-      }
-      #${mountId} .sq-layer{ position:relative; z-index:2; }
-
-      #${mountId} .sq-titleLink {
-        display: inline-block;
-        color: inherit;
-        text-decoration: none;
-      }
-      #${mountId} .sq-titleLink:hover {
-        text-decoration: underline;
-      }
-
-      #${mountId} .sq-badge{ position:relative; isolation:isolate; }
-      #${mountId} .sq-badge::before{
-        content:""; position:absolute; inset:-8px; border-radius:999px;
-        background: conic-gradient(from 0deg,
-          rgba(255,255,255,0.00),
-          rgba(255,245,200,0.95),
-          rgba(255,255,255,0.00),
-          rgba(255,210,120,0.85),
-          rgba(255,255,255,0.00)
-        );
-        filter:blur(1.5px); opacity:.65; animation:sq_runeSpin 3.8s linear infinite; z-index:-1;
-      }
-      #${mountId} .sq-badge::after{
-        content:""; position:absolute; inset:-18px; border-radius:999px;
-        background: radial-gradient(circle, rgba(255,220,120,.28), transparent 60%);
-        filter:blur(10px); opacity:.9; animation:sq_glowPulse 2.2s ease-in-out infinite; z-index:-2;
-      }
-
-      #${mountId} .sq-bar{ position:relative; overflow:hidden; }
-      #${mountId} .sq-bar::before{
-        content:""; position:absolute; inset:-18px; border-radius:999px;
-        background:
-          radial-gradient(circle at 20% 50%, rgba(255,245,200,.35), transparent 55%),
-          radial-gradient(circle at 70% 45%, rgba(255,210,120,.25), transparent 55%);
-        filter:blur(12px); opacity:.65; pointer-events:none; mix-blend-mode:screen;
-      }
-      #${mountId} .sq-shimmer{
-        position:absolute; top:-35%; bottom:-35%; width:42%;
-        background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.95), rgba(255,255,255,0));
-        animation:sq_shimmerSweep 1.45s ease-in-out infinite;
-        pointer-events:none; mix-blend-mode:overlay; filter:blur(.2px);
-      }
-      #${mountId} .sq-runes{
-        position:absolute; inset:0;
-        background:
-          repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 12px),
-          repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 14px);
-        opacity:.35; pointer-events:none; mix-blend-mode:overlay;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  function removeLegendaryStyle() {
-    const style = document.getElementById("studyquest-legendary-style");
-    if (style) style.remove();
-  }
 
   function renderStatsPanel(stats, accent, epic) {
     const wrap = document.createElement("div");
-    wrap.style.display = "grid";
-    wrap.style.gap = "10px";
-    wrap.style.marginTop = epic ? "6px" : "4px";
+    wrap.className = "sq-stats";
 
     const details = document.createElement("details");
+    details.className = "sq-stats-details";
     details.open = false;
 
     const summary = document.createElement("summary");
     summary.textContent = "Statistik";
-    summary.style.cursor = "pointer";
-    summary.style.listStyle = "none";
-    summary.style.fontWeight = "800";
-    summary.style.fontSize = epic ? "15px" : "13px";
-    summary.style.padding = "6px 0";
-    summary.style.color = "inherit";
+    summary.className = "sq-stats-summary";
     details.appendChild(summary);
 
     const body = document.createElement("div");
-    body.style.display = "grid";
-    body.style.gap = "12px";
-    body.style.padding = "6px 0 2px 0";
+    body.className = "sq-stats-body";
 
     const series = stats?.series || [];
     const termSeries = stats?.termSeries || [];
@@ -549,83 +452,58 @@
       empty.textContent = stats?.hasData
         ? "Hittar ingen tidsstämplad HP ännu. Skanna fler kurser eller öppna kursresultat så att datum finns."
         : "Ingen statistik ännu — skanna kurser för att bygga upp data.";
-      empty.style.fontSize = epic ? "13px" : "12px";
-      empty.style.opacity = "0.75";
+      empty.className = "sq-stats-empty";
       body.appendChild(empty);
     } else {
       const lineWrap = document.createElement("div");
+      lineWrap.className = "sq-section";
       const lineTitle = document.createElement("div");
       lineTitle.textContent = "Total HP över tid (kumulativt, baserat på godkända moment)";
-      lineTitle.style.fontSize = epic ? "13px" : "12px";
-      lineTitle.style.fontWeight = "700";
-      lineTitle.style.marginBottom = "6px";
+      lineTitle.className = "sq-section-title";
       lineWrap.appendChild(lineTitle);
 
       const lineCanvas = document.createElement("canvas");
-      lineCanvas.style.width = "100%";
-      lineCanvas.style.height = "160px";
-      lineCanvas.style.borderRadius = "12px";
-      lineCanvas.style.background = epic ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.8)";
-      lineCanvas.style.border = `1px solid ${rgbToRgba(accent, 0.18)}`;
+      lineCanvas.className = "sq-chart sq-chart--lg";
       lineWrap.appendChild(lineCanvas);
 
       const midWrap = document.createElement("div");
+      midWrap.className = "sq-section";
       const midTitle = document.createElement("div");
       midTitle.textContent = "Per månad";
-      midTitle.style.fontSize = epic ? "13px" : "12px";
-      midTitle.style.fontWeight = "700";
-      midTitle.style.marginBottom = "6px";
+      midTitle.className = "sq-section-title";
       midWrap.appendChild(midTitle);
 
       const modWrap = document.createElement("div");
+      modWrap.className = "sq-chart-wrap";
       const modCanvas = document.createElement("canvas");
-      modCanvas.style.width = "100%";
-      modCanvas.style.height = "110px";
-      modCanvas.style.borderRadius = "12px";
-      modCanvas.style.background = epic ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.8)";
-      modCanvas.style.border = `1px solid ${rgbToRgba(accent, 0.18)}`;
+      modCanvas.className = "sq-chart sq-chart--sm";
       modWrap.appendChild(modCanvas);
 
       const hpWrap = document.createElement("div");
+      hpWrap.className = "sq-chart-wrap is-hidden";
       const hpCanvas = document.createElement("canvas");
-      hpCanvas.style.width = "100%";
-      hpCanvas.style.height = "110px";
-      hpCanvas.style.borderRadius = "12px";
-      hpCanvas.style.background = epic ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.8)";
-      hpCanvas.style.border = `1px solid ${rgbToRgba(accent, 0.18)}`;
+      hpCanvas.className = "sq-chart sq-chart--sm";
       hpWrap.appendChild(hpCanvas);
 
       const midToggle = document.createElement("div");
-      midToggle.style.display = "flex";
-      midToggle.style.gap = "8px";
-      midToggle.style.margin = "4px 0 2px 0";
+      midToggle.className = "sq-toggle";
 
       const midBtnModules = document.createElement("button");
       midBtnModules.type = "button";
       midBtnModules.textContent = "Moduler";
-      midBtnModules.style.borderRadius = "999px";
-      midBtnModules.style.padding = "6px 10px";
-      midBtnModules.style.fontSize = epic ? "12px" : "11px";
-      midBtnModules.style.border = `1px solid ${rgbToRgba(accent, 0.18)}`;
-      midBtnModules.style.background = rgbToRgba(accent, 0.12);
-      midBtnModules.style.cursor = "pointer";
+      midBtnModules.className = "sq-toggle-btn is-active";
 
       const midBtnHp = document.createElement("button");
       midBtnHp.type = "button";
       midBtnHp.textContent = "HP";
-      midBtnHp.style.borderRadius = "999px";
-      midBtnHp.style.padding = "6px 10px";
-      midBtnHp.style.fontSize = epic ? "12px" : "11px";
-      midBtnHp.style.border = `1px solid ${rgbToRgba(accent, 0.18)}`;
-      midBtnHp.style.background = "rgba(255,255,255,0.8)";
-      midBtnHp.style.cursor = "pointer";
+      midBtnHp.className = "sq-toggle-btn";
 
       const setMidMode = (mode) => {
         const showModules = mode === "modules";
-        modWrap.style.display = showModules ? "block" : "none";
-        hpWrap.style.display = showModules ? "none" : "block";
-        midBtnModules.style.background = showModules ? rgbToRgba(accent, 0.12) : "rgba(255,255,255,0.8)";
-        midBtnHp.style.background = showModules ? "rgba(255,255,255,0.8)" : rgbToRgba(accent, 0.12);
+        modWrap.classList.toggle("is-hidden", !showModules);
+        hpWrap.classList.toggle("is-hidden", showModules);
+        midBtnModules.classList.toggle("is-active", showModules);
+        midBtnHp.classList.toggle("is-active", !showModules);
         midBtnModules.setAttribute("aria-pressed", showModules ? "true" : "false");
         midBtnHp.setAttribute("aria-pressed", showModules ? "false" : "true");
 
@@ -650,19 +528,14 @@
       midWrap.appendChild(hpWrap);
 
       const termWrap = document.createElement("div");
+      termWrap.className = "sq-section";
       const termTitle = document.createElement("div");
       termTitle.textContent = "HP per termin (summa)";
-      termTitle.style.fontSize = epic ? "13px" : "12px";
-      termTitle.style.fontWeight = "700";
-      termTitle.style.marginBottom = "6px";
+      termTitle.className = "sq-section-title";
       termWrap.appendChild(termTitle);
 
       const termCanvas = document.createElement("canvas");
-      termCanvas.style.width = "100%";
-      termCanvas.style.height = "120px";
-      termCanvas.style.borderRadius = "12px";
-      termCanvas.style.background = epic ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.8)";
-      termCanvas.style.border = `1px solid ${rgbToRgba(accent, 0.18)}`;
+      termCanvas.className = "sq-chart sq-chart--md";
       termWrap.appendChild(termCanvas);
 
       body.appendChild(lineWrap);
@@ -709,21 +582,10 @@
   function ensureTooltip(canvas) {
     if (canvas.__ladokppTooltip) return canvas.__ladokppTooltip;
     const tip = document.createElement("div");
-    tip.style.position = "absolute";
-    tip.style.pointerEvents = "none";
-    tip.style.background = "rgba(15, 23, 42, 0.92)";
-    tip.style.color = "white";
-    tip.style.padding = "6px 8px";
-    tip.style.borderRadius = "8px";
-    tip.style.fontSize = "11px";
-    tip.style.whiteSpace = "nowrap";
-    tip.style.transform = "translate(-50%, -110%)";
-    tip.style.opacity = "0";
-    tip.style.transition = "opacity 120ms ease";
-    tip.style.zIndex = "10";
+    tip.className = "sq-tooltip";
     const parent = canvas.parentElement;
     if (parent) {
-      parent.style.position = "relative";
+      parent.classList.add("sq-chart-host");
       parent.appendChild(tip);
     }
     canvas.__ladokppTooltip = tip;
@@ -1056,11 +918,7 @@
   function renderWidget({ titleAnchor, completedHp, totalHp, extras }, cfg) {
     const accent = pickAccentColor();
     const epic = !!cfg.epicMode;
-    if (epic) {
-      ensureLegendaryStyle(cfg.mountId);
-    } else {
-      removeLegendaryStyle();
-    }
+    // styling handled by main.css
 
     const prog = makeProgression(totalHp, cfg);
     const xp = completedHp * prog.xpPerHp;
@@ -1074,60 +932,35 @@
 
     const wrap = document.createElement("div");
     wrap.id = cfg.mountId;
-    if (epic) wrap.classList.add("sq-legendary");
-
-    wrap.style.display = "grid";
-    wrap.style.gap = epic ? "12px" : "8px";
-    wrap.style.width = "100%";
-    wrap.style.padding = epic ? "max(14px, 2.6vw) max(14px, 3.2vw)" : "max(8px, 1.6vw) max(10px, 2.2vw)";
-    wrap.style.borderRadius = epic ? "max(18px, 2.2vw)" : "max(14px, 1.8vw)";
-    wrap.style.boxSizing = "border-box";
-    wrap.style.border = `1px solid ${rgbToRgba(accent, 0.22)}`;
-    wrap.style.background = epic
-      ? `linear-gradient(180deg, rgba(255, 252, 245, 0.96), rgba(255,255,255,0.92))`
-      : `linear-gradient(180deg, ${rgbToRgba(accent, 0.14)}, rgba(255,255,255,0.93))`;
-    wrap.style.boxShadow = epic
-      ? `0 22px 48px ${rgbToRgba(accent, 0.20)}, 0 0 0 1px rgba(255, 230, 150, 0.12) inset`
-      : `0 10px 22px ${rgbToRgba(accent, 0.10)}`;
-    wrap.style.fontFamily = "inherit";
-    wrap.style.boxSizing = "border-box";
+    wrap.className = `sq-widget ${epic ? "sq-legendary" : "sq-normal"}`;
+    wrap.style.setProperty("--sq-accent", accent);
+    wrap.style.setProperty("--sq-accent-10", rgbToRgba(accent, 0.10));
+    wrap.style.setProperty("--sq-accent-12", rgbToRgba(accent, 0.12));
+    wrap.style.setProperty("--sq-accent-14", rgbToRgba(accent, 0.14));
+    wrap.style.setProperty("--sq-accent-15", rgbToRgba(accent, 0.15));
+    wrap.style.setProperty("--sq-accent-18", rgbToRgba(accent, 0.18));
+    wrap.style.setProperty("--sq-accent-20", rgbToRgba(accent, 0.20));
+    wrap.style.setProperty("--sq-accent-22", rgbToRgba(accent, 0.22));
+    wrap.style.setProperty("--sq-accent-28", rgbToRgba(accent, 0.28));
 
     const layer = document.createElement("div");
     layer.className = "sq-layer";
-    layer.style.display = "grid";
-    layer.style.gap = epic ? "12px" : "8px";
 
     // Top row
     const top = document.createElement("div");
-    top.style.display = "flex";
-    top.style.alignItems = "baseline";
-    top.style.justifyContent = "space-between";
-    top.style.gap = "14px";
+    top.className = "sq-top";
 
     const left = document.createElement("div");
-    left.style.display = "flex";
-    left.style.flexDirection = "column";
-    left.style.minWidth = "0";
+    left.className = "sq-left";
 
     // Put the clickable program <a> inside the module
     const label = document.createElement("div");
-    label.style.fontSize = epic ? "30px" : "27px";
-    label.style.letterSpacing = "0.01em";
-    label.style.opacity = "0.92";
-    if (epic) label.style.textShadow = "0 1px 0 rgba(255,255,255,0.65)";
+    label.className = "sq-label";
 
     if (titleAnchor) {
       const aClone = titleAnchor.cloneNode(true);
       // Make sure it inherits and doesn't look off
       aClone.classList.add("sq-titleLink");
-      aClone.style.color = "inherit";
-      aClone.style.textDecoration = "none";
-      aClone.style.fontWeight = "700";
-      aClone.style.display = "inline-block";
-      aClone.style.maxWidth = "100%";
-      aClone.style.whiteSpace = "nowrap";
-      aClone.style.overflow = "hidden";
-      aClone.style.textOverflow = "ellipsis";
       label.appendChild(aClone);
     } else {
       label.textContent = "Min utbildning";
@@ -1137,12 +970,7 @@
 
     const hpLine = document.createElement("div");
     hpLine.textContent = `${completedHp.toLocaleString("sv-SE")} / ${totalHp.toLocaleString("sv-SE")} hp`;
-    hpLine.style.fontSize = epic ? "25px" : "21px";
-    hpLine.style.fontWeight = epic ? "900" : "700";
-    hpLine.style.whiteSpace = "nowrap";
-    hpLine.style.overflow = "hidden";
-    hpLine.style.textOverflow = "ellipsis";
-    if (epic) hpLine.style.textShadow = "0 2px 12px rgba(255, 210, 120, 0.22)";
+    hpLine.className = "sq-hpLine";
     left.appendChild(hpLine);
 
     const badge = document.createElement("div");
@@ -1150,23 +978,7 @@
     badge.setAttribute("role", "status");
     badge.setAttribute("aria-label", `Level ${level} of 100`);
     badge.textContent = `LV ${level} / 100`;
-    badge.style.fontSize = epic ? "23px" : "19px";
-    badge.style.fontWeight = "950";
-    badge.style.color = epic ? "rgba(10, 12, 18, 0.92)" : "white";
-    badge.style.background = epic
-      ? `linear-gradient(135deg, rgba(255,246,210,1), rgba(255,210,120,1), rgba(255,245,200,1))`
-      : accent;
-    badge.style.padding = epic ? "12px 18px" : "10px 14px";
-    badge.style.borderRadius = "999px";
-    badge.style.whiteSpace = "nowrap";
-    badge.style.flex = "0 0 auto";
-    badge.style.lineHeight = "1";
-    badge.style.border = epic
-      ? "1px solid rgba(120, 78, 20, 0.35)"
-      : `1px solid ${rgbToRgba(accent, 0.15)}`;
-    badge.style.boxShadow = epic
-      ? "0 14px 30px rgba(255, 200, 110, 0.35), 0 2px 0 rgba(255,255,255,0.65) inset"
-      : `0 10px 24px ${rgbToRgba(accent, 0.28)}`;
+    badge.className = "sq-badge";
 
     top.appendChild(left);
     top.appendChild(badge);
@@ -1179,26 +991,11 @@
     barWrap.setAttribute("aria-valuemin", "0");
     barWrap.setAttribute("aria-valuemax", "100");
     barWrap.setAttribute("aria-label", `Progress to level ${Math.min(100, level + 1)}: ${Math.round(pct)}%`);
-    barWrap.style.height = epic ? "28px" : "19px";
-    barWrap.style.background = epic
-      ? "linear-gradient(180deg, rgba(30, 22, 12, 0.18), rgba(0,0,0,0.10))"
-      : "rgba(0,0,0,0.10)";
-    barWrap.style.borderRadius = "999px";
-    barWrap.style.overflow = "hidden";
-    barWrap.style.position = "relative";
-    barWrap.style.boxShadow = epic
-      ? "0 10px 22px rgba(0,0,0,0.10) inset, 0 0 0 1px rgba(255, 230, 150, 0.14) inset"
-      : "0 0 0 1px rgba(0,0,0,0.06) inset";
+    barWrap.className = "sq-bar";
 
     const bar = document.createElement("div");
-    bar.style.height = "100%";
+    bar.className = "sq-barFill";
     bar.style.width = `${pct}%`;
-    bar.style.background = epic
-      ? `linear-gradient(90deg, rgba(255,225,145,1), rgba(255,190,90,1), rgba(255,245,200,1))`
-      : accent;
-    bar.style.borderRadius = "999px";
-    bar.style.transition = "width 220ms ease";
-    bar.style.boxShadow = epic ? "0 10px 26px rgba(255, 200, 110, 0.45)" : "none";
     barWrap.appendChild(bar);
 
     if (epic) {
@@ -1214,18 +1011,13 @@
     // Footer
     if (cfg.showXpToNext) {
       const foot = document.createElement("div");
-      foot.style.display = "flex";
-      foot.style.justifyContent = "space-between";
-      foot.style.alignItems = "center";
-      foot.style.gap = "14px";
-      foot.style.fontSize = epic ? "15px" : "13px";
-      foot.style.opacity = "0.95";
+      foot.className = "sq-foot";
 
       const l = document.createElement("div");
       l.textContent = `Mot lvl ${Math.min(100, level + 1)}`;
 
       const r = document.createElement("div");
-      r.style.fontVariantNumeric = "tabular-nums";
+      r.className = "sq-foot-right";
       r.textContent = `${formatInt(into)} / ${formatInt(span)} XP`;
 
       foot.appendChild(l);
@@ -1242,18 +1034,10 @@
     // ---- Ladok++ extras: scan coverage + modules progress + scan button ----
     if (extras && cfg.showStats) {
       const extra = document.createElement("div");
-      extra.style.display = "flex";
-      extra.style.justifyContent = "space-between";
-      extra.style.alignItems = "center";
-      extra.style.gap = "12px";
-      extra.style.marginTop = epic ? "6px" : "4px";
-      extra.style.fontSize = epic ? "14px" : "12px";
-      extra.style.opacity = "0.92";
+      extra.className = "sq-extra";
 
       const leftExtra = document.createElement("div");
-      leftExtra.style.whiteSpace = "nowrap";
-      leftExtra.style.overflow = "hidden";
-      leftExtra.style.textOverflow = "ellipsis";
+      leftExtra.className = "sq-extra-left";
 
       const { savedCourseCount, modulesPassed, modulesTotal, listCourseCount } = extras;
       const coverage = (typeof listCourseCount === "number" && listCourseCount > 0)
@@ -1271,14 +1055,7 @@
       btn.setAttribute("aria-label", extras.scanBusy ? "Scanning all courses" : "Scan all courses");
       btn.textContent = extras.scanBusy ? "Skannar…" : "Skanna alla";
       btn.disabled = !!extras.scanBusy;
-      btn.style.border = `1px solid ${rgbToRgba(accent, 0.20)}`;
-      btn.style.background = epic ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0.85)";
-      btn.style.color = "inherit";
-      btn.style.borderRadius = "999px";
-      btn.style.padding = epic ? "8px 12px" : "6px 10px";
-      btn.style.fontWeight = "700";
-      btn.style.cursor = btn.disabled ? "not-allowed" : "pointer";
-      btn.style.whiteSpace = "nowrap";
+      btn.className = "sq-btn sq-btn--scan";
 
       btn.addEventListener("click", () => {
         // delegate back to mountOrUpdate (it will attach handler via extras.onScanAll)
